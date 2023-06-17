@@ -17,7 +17,7 @@ def search_pdfs(folder, filepaths: List[Path], search_ids: List) -> pd.DataFrame
         cache_df = pd.read_csv(cache_df_file, dtype="str")
     else:
         cache_df_file.parent.mkdir(parents=True, exist_ok=True)
-        cache_df_file.touch()
+        cache_df_file.touch(exist_ok=True)
         cache_df = pd.DataFrame(columns=["ID", "STATUS", "REASON"])
     file_progress = 0
     total_files = len(filepaths)
