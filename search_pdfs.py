@@ -44,7 +44,7 @@ def search_pdfs(folder, filepaths: List[Path], search_ids: List) -> pd.DataFrame
         print(f"File {file_progress}/{total_files} complete.", end="\r")
     cache_df.drop_duplicates(subset=["ID"], keep="last", inplace=True)
     cache_df.to_csv(cache_df_file, index=False)
-    print(f"Processed: {processed}, Cached: {cached}, Skipped: {skipped}.")
+    print(f"Processed PDFs: {processed}, Cached: {cached}, Skipped: {skipped}.")
     results = cache_df.loc[cache_df["ID"].isin(search_ids)]
     print(f"Found {len(results)} matching rows in {len(cache_df)} rows.")
     return results

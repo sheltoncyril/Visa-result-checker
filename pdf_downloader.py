@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 
 base_url = "https://www.dfa.ie"
-url = "/irish-embassy/india/visas/processing-times-decisions-appeals/"
+path = "/irish-embassy/india/visas/processing-times-decisions-appeals/"
 
 
 def pdf_downloader(folder):
@@ -15,14 +15,14 @@ def pdf_downloader(folder):
     if not folder_path.exists():
         folder_path.mkdir(parents=True, exist_ok=True)
     file_paths = list()
-    page = requests.get(base_url+url)
+    page = requests.get(base_url+path)
     soup = BeautifulSoup(page.content, "html.parser")
     results = soup.find(id="tab2").find_all("a", href=True)[1:]
-    file_name_to_url_map = {r["href"].split("/")[-1]: r['href'] for r in results}
-    for filename, file_url in file_name_to_url_map.items():
+    file_name_to_path_map = {r["href"].split("/")[-1]: r['href'] for r in results}
+    for filename, file_download_path in file_name_to_path_map.items():
         file_path = folder_path.joinpath(filename)
         if not file_path.exists():
-            f = requests.get(base_url+file_url)
+            f = requests.get(base_url+file_download_path)
             with open(file_path, "wb") as fb:
                 fb.write(f.content)
                 downloaded += 1
