@@ -1,7 +1,6 @@
 from pathlib import Path
 
-import pdf_downloader
-import search_pdfs
+from utils import pdf_downloader, search_pdfs
 
 FOLDER = "./temp"
 SEARCH_IDS = []
