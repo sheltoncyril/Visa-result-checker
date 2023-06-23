@@ -1,1 +1,1 @@
-from . import pdf_downloader, search_pdfs
+from . import pdf_downloader, text_search_pdfs

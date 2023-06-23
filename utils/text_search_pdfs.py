@@ -1,13 +1,16 @@
 
+import re
 import sys
 from pathlib import Path
 from typing import List
 
-import camelot
 import pandas as pd
+from PyPDF2 import PdfReader
+
+id_regex = re.compile("^[54][0-9]{6,10}")
 
 
-def search_pdfs(folder, filepaths: List[Path], search_ids: List) -> pd.DataFrame:
+def text_search_pdfs(folder, filepaths: List[Path], search_ids: List) -> pd.DataFrame:
     cached = 0
     processed = 0
     skipped = 0
@@ -29,15 +32,11 @@ def search_pdfs(folder, filepaths: List[Path], search_ids: List) -> pd.DataFrame
         else:
             csv_filepath.parent.mkdir(parents=True, exist_ok=True)
             csv_filepath.touch(exist_ok=True)
-            tables = camelot.read_pdf(str(filepath),
-                                      pages="all")
-            if not tables:
+            tables = _get_tables(filepath)
+            df = tables
+            if tables.empty:
                 skipped += 1
                 continue
-            df = pd.concat([table.df for table in tables], ignore_index=True)
-            df.columns = ["ID", "STATUS", "REASON"]
-            df = df[1:]  # Remove first line of dataframe as it contains the names of columns
-            df = combine_split_rows(df)
             df.to_csv(csv_filepath, index=False)
             processed += 1
         cache_df = pd.concat([cache_df, df], ignore_index=True)
@@ -51,28 +50,43 @@ def search_pdfs(folder, filepaths: List[Path], search_ids: List) -> pd.DataFrame
     return results
 
 
-def combine_split_rows(df):
-    dangling_rows = df.loc[(df["ID"].isnull()) | (df["ID"] == "")]
-    indices_to_drop = list()
-    if not dangling_rows.empty:
-        for record_index in dangling_rows.index:
-            string_buf = ""
-            found = False
-            idx = record_index
-            while not found:
-                row = df.loc[idx]
-                partial_reason = row["REASON"]
-                string_buf = partial_reason + string_buf if not pd.isna(partial_reason) else string_buf
-                if not pd.isna(row["ID"]) and not row["ID"] == "":
-                    df.loc[idx, ["REASON"]] = [string_buf]
-                    found = True
-                else:
-                    indices_to_drop.append(idx)
-                    idx -= 1
-    return df.drop(indices_to_drop)
+def _get_tables(filepath: Path):
+
+    reader = PdfReader(str(filepath))
+    parsed_lines = []
+
+    def visitor_body(text, cm, tm, fontDict, fontSize):
+        y = tm[5]
+        if y < 250 and text != y > -350 and text != "":
+            parsed_lines.append(text)
+
+    for page in reader.pages:
+        page.extract_text(visitor_text=visitor_body)
+
+    def line_generator(arr: List):
+        idx = 0
+        ar_len = len(arr)
+        buf = []
+        part = 1
+        while arr and idx < ar_len - 1:
+            text = arr[idx]
+            idx += 1
+            if part < 3:
+                text = text.strip("\n")
+            part += 1
+            buf.append(text)
+            if bool(id_regex.search(arr[idx])):
+                if len(buf) > 3:
+                    buf = [buf[0], buf[1], "".join(buf[2:-1])]
+                ret = buf
+                buf = []
+                part = 1
+                yield ret
+
+    return pd.DataFrame(line_generator(parsed_lines), columns=["ID", "STATUS", "REASON"])
 
 
 if __name__ == "__main__":
     print("This file cannot be run as a script.")
 else:
-    sys.modules[__name__] = search_pdfs
+    sys.modules[__name__] = text_search_pdfs
