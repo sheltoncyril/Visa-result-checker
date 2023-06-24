@@ -77,12 +77,11 @@ def _get_tables(filepath: Path):
             buf.append(text)
             if bool(id_regex.search(arr[idx])):
                 if len(buf) > 3:
-                    buf = [buf[0], buf[1], "".join(buf[2:-1])]
+                    buf = [buf[0], buf[1], "".join(buf[2:])]
                 ret = buf
                 buf = []
                 part = 1
                 yield ret
-
     return pd.DataFrame(line_generator(parsed_lines), columns=["ID", "STATUS", "REASON"])
 
 
