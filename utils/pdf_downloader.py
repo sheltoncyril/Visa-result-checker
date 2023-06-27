@@ -31,7 +31,7 @@ def pdf_downloader(folder):
         file_paths.append(file_path)
         print(f"Downloaded: {downloaded}, Cached: {cached}", end="\r")
     print(f"\nTotal files: {downloaded+cached}")
-    return file_paths
+    return file_paths, [f"downloaded: {downloaded}", f"cached: {cached}", f"total: {downloaded+cached}"]
 
 
 if __name__ == "__main__":

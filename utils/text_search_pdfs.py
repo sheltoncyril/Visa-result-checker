@@ -47,7 +47,7 @@ def text_search_pdfs(folder, filepaths: List[Path], search_ids: List) -> pd.Data
     print(f"Processed PDFs: {processed}, Cached: {cached}, Skipped: {skipped}.")
     results = cache_df.loc[cache_df["ID"].isin(search_ids)]
     print(f"Found {len(results)} matching rows in {len(cache_df)} rows.")
-    return results
+    return results, [f"newly_parsed: {processed}", f"cached: {cached}", f"skipped: {skipped}", f"total: {processed+cached}"]
 
 
 def _get_tables(filepath: Path):
