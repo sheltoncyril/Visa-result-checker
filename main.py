@@ -43,7 +43,7 @@ trace.append("------------------------------ end ------------------------------"
 email_body += "\n\n\n\n" + "\n".join(trace)
 email_html += "<br/><br/><br/>" + "<br/>".join(trace)
 mg_client = MGClient(api_key=MG_API_KEY, api_url=MG_URL, sender=EMAIL_SENDER)
-if not results.equals(previous_results):
+if not results.equals(previous_results) and not results.empty:
     mg_client.send_mail(to=MAIL_TO, subject=email_subject, body=email_body, html=email_html)
 else:
     print("Not sending an email as the results are unchanged.")
