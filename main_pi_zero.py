@@ -45,5 +45,5 @@ elif results.equals(previous_results):
     print_delay(f"No change in results.")
 else:
     print_delay(f"Found results for IDs.")
-print_delay(f"Saved results to: {results_dir}", line=2)
+# print_delay(f"Saved results to: {results_dir}", line=2)
 buzz()
