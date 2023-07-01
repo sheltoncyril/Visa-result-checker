@@ -20,14 +20,16 @@ trace = list()
 folder_path = Path(TEMP_FOLDER)
 if not folder_path.exists():
     folder_path.mkdir(parents=True, exist_ok=True)
-print_delay("Starting download", clear_post=True)
+print_delay("Starting download")
 buzz(0.05, 2, 0.1)
 file_paths, download_stats = pdf_downloader(folder_path)
+print_delay("", 0)
 for l, k in enumerate(download_stats):
     print_delay(k, pre_clear=False, line=l)
 print_delay("Downloads complete. Processing PDFs.")
 buzz(0.05, 2, 0.1)
 results, search_stats = text_search_pdfs(folder_path, file_paths, SEARCH_IDS)
+print_delay("", 0)
 for l, k in enumerate(search_stats):
     print_delay(k, pre_clear=False, line=l)
 results_file_name = "results-"+str(date)+".csv"
