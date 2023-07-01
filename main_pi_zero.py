@@ -23,12 +23,12 @@ if not folder_path.exists():
 print_delay("Starting download", clear_post=True)
 buzz(0.05, 2, 0.1)
 file_paths, download_stats = pdf_downloader(folder_path)
-for k, l in enumerate(download_stats):
+for l, k in enumerate(download_stats):
     print_delay(f"{k}: {download_stats[k]}", pre_clear=False, line=l)
 print_delay("Downloads complete. Processing PDFs.")
 buzz(0.05, 2, 0.1)
 results, search_stats = text_search_pdfs(folder_path, file_paths, SEARCH_IDS)
-for k, l in enumerate(search_stats):
+for l, k in enumerate(search_stats):
     print_delay(f"{k}: {search_stats[k]}", pre_clear=False, line=l)
 results_file_name = "results-"+str(date)+".csv"
 previous_results_file = folder_path.joinpath(results_file_name)
