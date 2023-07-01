@@ -45,6 +45,6 @@ elif results.equals(previous_results):
     print_delay(f"No change in results.")
 else:
     print_delay(f"Found results for IDs.")
-print_delay(f"IDs: {SEARCH_IDS}", pre_clear=False)
+print_delay(f"IDs: {SEARCH_IDS}", pre_clear=False, line=1)
 # print_delay(f"Saved results to: {results_dir}", line=2)
 buzz()
