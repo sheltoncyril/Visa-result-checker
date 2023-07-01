@@ -23,9 +23,9 @@ class CommonUtils:
 
     def buzz(self, on=0.5, loop=1, off=None):
         for i in range(loop):
-            GPIO.output(self.buzzer, GPIO.HIGH)
+            GPIO.output(self.buzzer_pin, GPIO.HIGH)
             time.sleep(on)
-            GPIO.output(self.buzzer, GPIO.LOW)
+            GPIO.output(self.buzzer_pin, GPIO.LOW)
             if off:
                 time.sleep(off)
 
