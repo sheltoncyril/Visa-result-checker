@@ -12,26 +12,23 @@ class CommonUtils:
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.buzzer_pin, GPIO.OUT)
 
+    def print_delay(self, prnt_str, *, pre_clear=True, clear_post=False, delay=1, line=0, char=0):
+        if pre_clear:
+            self.lcd.clear()
+        self.lcd.cursor_pos = (line, char)
+        self.lcd.write_string(prnt_str)
+        time.sleep(delay)
+        if clear_post:
+            self.lcd.clear()
 
-def print_delay(self, prnt_str, *, pre_clear=True, clear_post=False, delay=1, line=0, char=0):
-    if pre_clear:
-        self.lcd.clear()
-    self.lcd.cursor_pos = (line, char)
-    self.lcd.write_string(prnt_str)
-    time.sleep(delay)
-    if clear_post:
-        self.lcd.clear()
+    def buzz(self, on=0.5, loop=1, off=None):
+        for i in range(loop):
+            GPIO.output(self.buzzer, GPIO.HIGH)
+            time.sleep(on)
+            GPIO.output(self.buzzer, GPIO.LOW)
+            if off:
+                time.sleep(off)
 
-
-def buzz(self, on=0.5, loop=1, off=None):
-    for i in range(loop):
-        GPIO.output(self.buzzer, GPIO.HIGH)
-        time.sleep(on)
-        GPIO.output(self.buzzer, GPIO.LOW)
-        if off:
-            time.sleep(off)
-
-
-def __del__(self):
-    self.lcd.close()
-    GPIO.cleanup()
+    def __del__(self):
+        self.lcd.close()
+        GPIO.cleanup()
