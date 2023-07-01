@@ -1,11 +1,16 @@
 import time
 
+import RPi.GPIO as GPIO
 from RPLCD.i2c import CharLCD
 
 
 class CommonUtils:
     def __init__(self):
         self.lcd = CharLCD("PCF8574", 0x27)
+        self.buzzer_pin = 26
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.buzzer_pin, GPIO.OUT)
 
 
 def print_delay(self, prnt_str, *, pre_clear=True, clear_post=False, delay=1, line=0, char=0):
@@ -18,5 +23,15 @@ def print_delay(self, prnt_str, *, pre_clear=True, clear_post=False, delay=1, li
         self.lcd.clear()
 
 
+def buzz(self, on=0.5, loop=1, off=None):
+    for i in range(loop):
+        GPIO.output(self.buzzer, GPIO.HIGH)
+        time.sleep(on)
+        GPIO.output(self.buzzer, GPIO.LOW)
+        if off:
+            time.sleep(off)
+
+
 def __del__(self):
     self.lcd.close()
+    GPIO.cleanup()
