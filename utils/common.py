@@ -12,7 +12,7 @@ class CommonUtils:
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.buzzer_pin, GPIO.OUT)
 
-    def print_delay(self, prnt_str, *, pre_clear=True, clear_post=False, delay=1, line=0, char=0):
+    def print_delay(self, prnt_str, delay=0.5, *, pre_clear=True, clear_post=False, line=0, char=0):
         if pre_clear:
             self.lcd.clear()
         self.lcd.cursor_pos = (line, char)
