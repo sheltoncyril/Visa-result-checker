@@ -57,7 +57,7 @@ def _get_tables(filepath: Path):
 
     def visitor_body(text, cm, tm, fontDict, fontSize):
         y = tm[5]
-        if y < 250 and text != y > -350 and text != "":
+        if y < 250 and text != y > -550 and text != "":
             parsed_lines.append(text)
 
     for page in reader.pages:
